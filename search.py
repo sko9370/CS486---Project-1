@@ -100,8 +100,11 @@ def depthFirstSearch(problem):
         for succ in problem.getSuccessors(problem.getStartState()):
             stack.push( ( succ[0], [succ[1]] ) )
 
+    # given stack isEmpty method doesn't work like it's supposed to...
     #while not stack.isEmpty:
-    while stack != []:
+
+    #while stack != []:
+    while not len(stack.list) == 0:
         (currentState, path) = stack.pop()
         if problem.isGoalState(currentState):
             return path
@@ -111,6 +114,8 @@ def depthFirstSearch(problem):
                 # only push if not already explored
                 if successor[0] not in explored:
                     # path.append does not work here...?
+                    # because path.append doesn't return anything
+                    # it must be a separate step
                     stack.push( (successor[0], path + [successor[1]]) )
                 else:
                     pass
@@ -119,8 +124,28 @@ def depthFirstSearch(problem):
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    if problem.isGoalState(problem.getStartState()):
+        return []
+    else:
+        explored = {problem.getStartState()}
+        queue = util.Queue()
+        # load in first successors
+        for succ in problem.getSuccessors(problem.getStartState()):
+            queue.push( ( succ[0], [succ[1]] ) )
+
+    while not len(queue.list) == 0:
+        (currentState, path) = queue.pop()
+        if problem.isGoalState(currentState):
+            return path
+        else:
+            explored.add(currentState)
+            for successor in problem.getSuccessors(currentState):
+                if successor[0] not in explored:
+                    queue.push( (successor[0], path + [successor[1]]) )
+                else:
+                    pass
+
+    return []
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
