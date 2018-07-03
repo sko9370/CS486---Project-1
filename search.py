@@ -100,11 +100,7 @@ def depthFirstSearch(problem):
         for succ in problem.getSuccessors(problem.getStartState()):
             stack.push( ( succ[0], [succ[1]] ) )
 
-    # given stack isEmpty method doesn't work like it's supposed to...
-    #while not stack.isEmpty:
-
-    #while stack != []:
-    while not len(stack.list) == 0:
+    while not stack.isEmpty():
         (currentState, path) = stack.pop()
         if problem.isGoalState(currentState):
             return path
@@ -133,7 +129,7 @@ def breadthFirstSearch(problem):
         for succ in problem.getSuccessors(problem.getStartState()):
             queue.push( ( succ[0], [succ[1]] ) )
 
-    while not len(queue.list) == 0:
+    while not queue.isEmpty():
         (currentState, path) = queue.pop()
         if problem.isGoalState(currentState):
             return path
@@ -149,8 +145,29 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    if problem.isGoalState(problem.getStartState()):
+        return []
+    else:
+        explored = {problem.getStartState()}
+        pq = util.PriorityQueue()
+        # load in first successors
+        for succ in problem.getSuccessors(problem.getStartState()):
+            pq.push( (succ[0], [succ[1]]), problem.getCostOfActions([succ[1]]) )
+
+    while not pq.isEmpty():
+        (currentState, path) = pq.pop()
+        if problem.isGoalState(currentState):
+            return path
+        else:
+            explored.add(currentState)
+            for successor in problem.getSuccessors(currentState):
+                if successor[0] not in explored:
+                    priority = problem.getCostOfActions(path + [succ[1]])
+                    pq.push( (successor[0], path + [successor[1]]), priority )
+                else:
+                    pass
+
+    return []
 
 def nullHeuristic(state, problem=None):
     """
