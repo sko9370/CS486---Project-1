@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -82,12 +82,62 @@ def depthFirstSearch(problem):
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
 
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    # python 3 requires parens around print arg methinks
+
+    print("Start:", problem.getStartState())
+    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    if problem.isGoalState(problem.getStartState()):
+        return []
+    else:
+        explored = set(problem.getStartState())
+        # stack format: ( (xn,yn), List[ (x0,y0), (x1,y1), ...])
+        stack = util.Stack()
+        # load in first successors
+        for succ in problem.getSuccessors(problem.getStartState()):
+            stack.push( ( succ[0], [succ[1]] ) )
+
+    """
+    steki = util.Stack()
+    steki.push(0)
+    if steki.pop() == 0:
+        print("lol nice")
+    else:
+        print("no")
+
+    steki.push(5)
+    if steki.isEmpty:
+        print("steki empty...")
+        print("but it has: " + str(steki.pop()))
+    else:
+        print("it's actually not")
+
+    if stack.isEmpty:
+        print("stack empty...")
+    else:
+        print("it's actually not")
+    """
+
+    #while not stack.isEmpty:
+    while stack != []:
+        (currentState, path) = stack.pop()
+        print(currentState)
+        print(path)
+        if problem.isGoalState(currentState):
+            return path
+        else:
+            explored.add(currentState)
+            for successor in problem.getSuccessors(currentState):
+                # only push if not already explored
+                if successor[0] not in explored:
+                    stack.push( (successor[0], path.append(successor[1])) )
+                else:
+                    pass
+
+    return []
+    #return ['South', 'South', 'West', 'South', 'West', 'West', 'South', 'West']
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
