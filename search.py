@@ -92,12 +92,14 @@ def depthFirstSearch(problem):
     if problem.isGoalState(problem.getStartState()):
         return []
     else:
-        explored = set(problem.getStartState())
+        # doesn't work if set(...)
+        explored = {problem.getStartState()}
         # stack format: ( (xn,yn), List[ (x0,y0), (x1,y1), ...])
         stack = util.Stack()
         # load in first successors
         for succ in problem.getSuccessors(problem.getStartState()):
             stack.push( ( succ[0], [succ[1]] ) )
+            print(succ)
 
     """
     steki = util.Stack()
@@ -113,26 +115,29 @@ def depthFirstSearch(problem):
         print("but it has: " + str(steki.pop()))
     else:
         print("it's actually not")
-
-    if stack.isEmpty:
-        print("stack empty...")
-    else:
-        print("it's actually not")
     """
 
     #while not stack.isEmpty:
     while stack != []:
-        (currentState, path) = stack.pop()
-        print(currentState)
-        print(path)
+        print("\n")
+        next = stack.pop()
+        #(currentState, path) = stack.pop()
+        print("next: {}".format(next))
+        currentState = next[0]
+        path = next[1]
+        print("currentState: " + str(currentState))
+        print("path: " + str(path))
         if problem.isGoalState(currentState):
             return path
         else:
             explored.add(currentState)
+            print("explored: {}".format(explored))
             for successor in problem.getSuccessors(currentState):
                 # only push if not already explored
+                print("successor: {}".format(successor))
                 if successor[0] not in explored:
-                    stack.push( (successor[0], path.append(successor[1])) )
+                    # path.append does not work here...?
+                    stack.push( (successor[0], path + [successor[1]]) )
                 else:
                     pass
 
