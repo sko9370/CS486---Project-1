@@ -99,42 +99,16 @@ def depthFirstSearch(problem):
         # load in first successors
         for succ in problem.getSuccessors(problem.getStartState()):
             stack.push( ( succ[0], [succ[1]] ) )
-            print(succ)
-
-    """
-    steki = util.Stack()
-    steki.push(0)
-    if steki.pop() == 0:
-        print("lol nice")
-    else:
-        print("no")
-
-    steki.push(5)
-    if steki.isEmpty:
-        print("steki empty...")
-        print("but it has: " + str(steki.pop()))
-    else:
-        print("it's actually not")
-    """
 
     #while not stack.isEmpty:
     while stack != []:
-        print("\n")
-        next = stack.pop()
-        #(currentState, path) = stack.pop()
-        print("next: {}".format(next))
-        currentState = next[0]
-        path = next[1]
-        print("currentState: " + str(currentState))
-        print("path: " + str(path))
+        (currentState, path) = stack.pop()
         if problem.isGoalState(currentState):
             return path
         else:
             explored.add(currentState)
-            print("explored: {}".format(explored))
             for successor in problem.getSuccessors(currentState):
                 # only push if not already explored
-                print("successor: {}".format(successor))
                 if successor[0] not in explored:
                     # path.append does not work here...?
                     stack.push( (successor[0], path + [successor[1]]) )
@@ -142,7 +116,6 @@ def depthFirstSearch(problem):
                     pass
 
     return []
-    #return ['South', 'South', 'West', 'South', 'West', 'West', 'South', 'West']
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
